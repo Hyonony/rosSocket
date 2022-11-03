@@ -1,0 +1,71 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socket.io Test</title>
+
+  <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    #chatContent {
+      border: 1px solid #000;
+      width: 90%;
+      height: 200px;
+      margin-left: 10px;
+      margin-bottom: 10px;
+      margin-right: 10px;
+   
+      overflow-y: auto;
+    }
+
+    #myChat {
+      width: 90%;
+      margin-left: 10px;
+      margin-bottom: 10px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2 style="margin: 20px;"> 소켓 테스트 화면입니다. 터미널과 함께 확인해주세요.</h2>
+  <div id="chatContent">
+
+  </div>
+  <input id="myChat" type="text">
+  
+  <script>
+    var socket = io.connect('http://localhost:3000');
+
+    socket.on('message', function (data) {
+        $("#chatContent").append(`${data}<br>`);
+    });
+    // socket.on('emit_from_client', data=>{
+    //     $("#chatContent").append(`${data}<br>`);
+    // })
+
+    $("#myChat").on("keyup", function () {
+      if (window.event.keyCode == 13) {
+        $("#chatContent").append(`Client : "${$(this).val()}" 보냅니다.<br>`);
+        socket.emit('message', $(this).val());
+        $(this).val("");
+      }
+    });
+    
+  </script>
+</body>
+
+<p><a class="btn btn-primary btn-lg" href="./index.html" role="button">Let's go Home &raquo;</a></p>
+
+</html>
